@@ -134,7 +134,7 @@ In other words: this rough edge is part of the artifact history, not an oversigh
 
 NotebookLM case study placeholder:
 
-- [NotebookLM Case Study (placeholder)](https://example.com/notebooklm-case-study)
+- [NotebookLM Case Study]([https://notebooklm.google.com/notebook/4e69331c-7ae8-4590-9fae-5d7a6b0d00df]))
 
 ## Project Layout
 

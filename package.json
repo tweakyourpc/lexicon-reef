@@ -1,0 +1,22 @@
+{
+  "name": "lexicon-reef",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run --passWithNoTests --exclude tests/research.report.test.ts",
+    "test:watch": "vitest",
+    "research": "vitest run tests/research.report.test.ts",
+    "hub": "node scripts/program-hub.mjs",
+    "hub:list": "node scripts/program-hub.mjs list",
+    "hub:menu": "node scripts/program-hub.mjs menu"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.6"
+  }
+}

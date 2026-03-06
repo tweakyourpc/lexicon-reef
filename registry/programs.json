@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "lexicon-reef",
+      "cwd": ".",
+      "serviceName": "lexicon-reef",
+      "host": "0.0.0.0",
+      "startCommand": "npm run dev -- --host ${HOST} --port ${PORT}"
+    }
+  ]
+}

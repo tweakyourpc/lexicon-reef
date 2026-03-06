@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lexicon Reef</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: radial-gradient(circle at 20% 20%, #1d2a3b, #070b13 65%);
+        font-family: "Iosevka", "SF Mono", Menlo, Consolas, monospace;
+      }
+
+      #reef {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="reef" aria-label="Lexicon Reef simulation"></canvas>
+    <div
+      id="control-panel"
+      style="position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;padding:10px 12px;width:min(94vw,980px);background:rgba(5,10,16,0.78);border:1px solid rgba(170,210,255,0.32);border-radius:10px;backdrop-filter:blur(5px);z-index:10;"
+    >
+      <div id="control-row-main" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <button
+          id="btn-food-burst"
+          style="background:#13283a;color:#d3edff;border:1px solid rgba(162,211,255,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Food Burst
+        </button>
+        <button
+          id="btn-auto-nurture"
+          style="background:#203424;color:#dcffd0;border:1px solid rgba(161,230,140,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Auto Nurture: ON
+        </button>
+        <button
+          id="btn-glyph-bias"
+          style="background:#13283a;color:#d3edff;border:1px solid rgba(162,211,255,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Glyph Bias
+        </button>
+        <button
+          id="btn-bond-storm"
+          style="background:#13283a;color:#d3edff;border:1px solid rgba(162,211,255,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Bond Storm
+        </button>
+        <button
+          id="btn-export-run"
+          style="background:#203424;color:#dcffd0;border:1px solid rgba(161,230,140,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Export Run
+        </button>
+        <button
+          id="btn-pause"
+          style="background:#1f2730;color:#b8d6ec;border:1px solid rgba(162,211,255,0.34);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Pause
+        </button>
+        <button
+          id="btn-stop"
+          style="background:#312024;color:#ffd6dd;border:1px solid rgba(255,143,171,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Stop
+        </button>
+        <button
+          id="btn-save-score"
+          style="display:none;background:#203424;color:#dcffd0;border:1px solid rgba(161,230,140,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Save Score
+        </button>
+        <button
+          id="btn-load-score"
+          style="display:none;background:#203424;color:#dcffd0;border:1px solid rgba(161,230,140,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Load Score
+        </button>
+        <button
+          id="btn-copy-report"
+          style="background:#2f2439;color:#f2e9ff;border:1px solid rgba(198,163,255,0.42);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Copy Report
+        </button>
+      </div>
+
+      <div style="display:flex;justify-content:center;">
+        <button
+          id="btn-advanced-toggle"
+          style="background:#1f2730;color:#b8d6ec;border:1px solid rgba(162,211,255,0.34);border-radius:6px;padding:6px 10px;cursor:pointer;"
+        >
+          Advanced: OFF
+        </button>
+      </div>
+
+      <div
+        id="control-hint"
+        style="min-height:16px;font-size:11px;color:rgba(197,223,244,0.9);text-align:center;"
+      >
+        Hover a control to preview impact. Keys: A auto nurture, P pause, X stop/restart, H HUD. Advanced ON enables T timeline and B branch.
+      </div>
+
+      <div
+        id="control-meta"
+        style="min-height:15px;font-size:10px;color:rgba(161,230,140,0.9);text-align:center;"
+      >
+        auto nurture: on | assists: 0 | last: none yet
+      </div>
+
+      <div
+        id="glyph-bias-editor"
+        style="display:none;align-items:center;gap:10px;padding:8px 10px;border:1px solid rgba(162,211,255,0.24);border-radius:8px;background:rgba(14,22,34,0.72);"
+      >
+        <span style="font-size:12px;color:#d3edff;">Glyph Bias</span>
+        <input
+          id="glyph-bias-input"
+          type="text"
+          maxlength="1"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Glyph bias character"
+          style="width:46px;background:#09131d;color:#fefae0;border:1px solid rgba(233,196,106,0.55);border-radius:6px;padding:6px 8px;font-family:'Iosevka','SF Mono',Menlo,Consolas,monospace;font-size:14px;"
+        />
+        <span style="font-size:11px;color:rgba(197,223,244,0.86);">Enter to apply, Esc to cancel</span>
+      </div>
+
+      <div
+        id="load-score-editor"
+        style="display:none;flex-direction:column;gap:8px;padding:8px 10px;border:1px solid rgba(162,211,255,0.24);border-radius:8px;background:rgba(14,22,34,0.72);"
+      >
+        <span style="font-size:12px;color:#d3edff;">Paste RunArtifact JSON</span>
+        <textarea
+          id="load-score-input"
+          rows="5"
+          aria-label="Run artifact JSON"
+          style="resize:vertical;min-height:96px;background:#09131d;color:#c5dff4;border:1px solid rgba(162,211,255,0.38);border-radius:6px;padding:8px;font-family:'Iosevka','SF Mono',Menlo,Consolas,monospace;font-size:12px;"
+        ></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button
+            id="btn-load-score-cancel"
+            style="background:#1a2431;color:#d3edff;border:1px solid rgba(162,211,255,0.36);border-radius:6px;padding:6px 10px;cursor:pointer;"
+          >
+            Cancel
+          </button>
+          <button
+            id="btn-load-score-apply"
+            style="background:#203424;color:#dcffd0;border:1px solid rgba(161,230,140,0.45);border-radius:6px;padding:6px 10px;cursor:pointer;"
+          >
+            Apply Score
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="control-status"
+        aria-live="polite"
+        style="min-height:16px;font-size:11px;color:#d3edff;text-align:center;"
+      ></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

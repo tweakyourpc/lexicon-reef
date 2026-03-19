@@ -132,9 +132,7 @@ In other words: this rough edge is part of the artifact history, not an oversigh
 
 ## NotebookLM Case Study
 
-NotebookLM case study:
-
-- [NotebookLM Case Study]([https://notebooklm.google.com/notebook/4e69331c-7ae8-4590-9fae-5d7a6b0d00df])
+- [NotebookLM Case Study](https://notebooklm.google.com/notebook/4e69331c-7ae8-4590-9fae-5d7a6b0d00df)
 
 ## Project Layout
 
